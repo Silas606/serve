@@ -1,36 +1,69 @@
-## Contributing to TorchServe
+# Contributing
 
-If you are interested in contributing to TorchServe, your contributions will fall into two categories:
+## Set up your dev env
 
-1. You want to propose a new feature and implement it.
-    - Post about your intended feature as an issue, and we will discuss the design and implementation. Once we agree that the plan looks good, go ahead and implement it.
-2. You want to implement a feature or bug-fix for an outstanding issue.
-    - Search for your issue here: https://github.com/pytorch/serve/issues
-    - Pick an issue and comment on the task that you want to work on this feature.
-    - To ensure your changes doesn't break any of the existing features run the sanity suite as follows from serve directory:
-        - Install dependencies (if not already installed)
-          For CPU
-          
-          ```bash
-          python ts_scripts/install_dependencies.py --environment=dev
-          ```
-          
-         For GPU
-           ```bash
-           python ts_scripts/install_dependencies.py --environment=dev --cuda=cu102
-           ```
-            > Supported cuda versions as cu111, cu102, cu101, cu92
-       
-        - Run sanity suite
-          ```bash
-          python torchserve_sanity.py
-          ```
-    - Run Regression test `python test/regression_tests.py`
-    - For running individual test suites refer [code_coverage](docs/code_coverage.md) documentation
-    - If you are updating an existing model make sure that performance hasn't degraded by running [benchmarks](https://github.com/pytorch/serve/tree/master/benchmarks) on the master branch and your branch and verify there is no performance regression 
-    - For large changes make sure to run the [automated benchmark suite](https://github.com/pytorch/serve/tree/master/test/benchmark) which will run the apache bench tests on several configurations of CUDA and EC2 instances
-    - If you need more context on a particular issue, please create raise a ticket on [`TorchServe` GH repo](https://github.com/pytorch/serve/issues/new/choose) or connect to [PyTorch's slack channel](https://pytorch.slack.com/)
+* install virtualenv and virtualenvwrapper globally
+* do anything you want to your .zshrc for virtualenv (readthedocs)
+* create a virtualenv using the latest stable python.
+* enable the virtual env
+* install the package deps in dependencies
 
-Once you finish implementing a feature or bug-fix, please send a Pull Request to https://github.com/pytorch/serve. Use this [template](pull_request_template.md) when creating a Pull Request.
+on ubuntu 18.04, it's all something like this
+```
+❯ pip3 install virtualenv 
 
-For more non-technical guidance about how to contribute to PyTorch, see the Contributing Guide.
+❯ pip3 install virtualenvwrapper
+
+# this is for when you need to make the virtualenv
+❯ mkvirtualenv -p /usr/bin/python3.8 your-project
+
+# or, if the virtualenv is already there and you want to use it
+❯ workon your-project
+
+# now that we're in our virtualenv, use the virtualenv pip to install the required packages
+❯ pip install .
+
+# but wait! we want to be able to run tests, so go ahead and install the test dependencies too
+❯ pip install .[test]
+```
+
+so after this, your virtualenv is ready to do all the fun stuff in a safe way
+
+## Running basic script
+
+let's execute the command line script to get a pipeline definition from one of the pipeline scripts in the project.
+
+```
+❯ workon your-project
+
+❯ get-pipeline-definition --help
+usage: Gets the pipeline definition for the pipeline script. [-h] [-n MODULE_NAME] [-kwargs KWARGS]
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -n MODULE_NAME, --module-name MODULE_NAME
+                        The module name of the pipeline to import.
+  -kwargs KWARGS, --kwargs KWARGS
+                        Dict string of keyword arguments for the pipeline generation (if supported)
+```
+
+## Running tests
+
+start up your virtualenv again and let's get to testing
+
+```
+❯ workon your-project
+
+❯ python -m pytest   
+============================================================= test session starts =============================================================
+cachedir: .pytest_cache
+plugins: cov-2.10.1
+collected 2 items                                                                                                                               
+
+tests/test_pipelines.py::test_that_you_wrote_tests XFAIL                                                                           [ 50%]
+tests/test_pipelines.py::test_pipelines_importable PASSED                                                                          [100%]
+
+======================================================== 1 passed, 1 xfailed in 0.04s =========================================================
+```
+
+w00t! there you go. have fun developing!

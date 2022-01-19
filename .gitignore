@@ -1,29 +1,6 @@
-build/
-dist/
-*pyc
-*__pycache__*
-*.egg-info/
-.idea
-*htmlcov*
+*.egg-info
+.cache
 .coverage
-.github/actions/
-.github/.DS_Store
-.DS_Store
-frontend/server/src/main/java/org/pytorch/serve/grpc/
-*.pem
-*.backup
-
-# Postman files
-test/artifacts/
-test/logs/
-test/model_store/
-test/ts_console.log
-test/config.properties
-
-
-.vscode
-.scratch/
-
-# Custom benchmark artifacts
-instances.yaml
-instances.yaml.backup
+.tox
+__pycache__
+.sagemaker-code-config
